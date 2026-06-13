@@ -1,0 +1,341 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta
+      name="description"
+      content="Interactive exploration of U.S. presidential election results from 1976 through 2024."
+    >
+    <title>American Choice | Presidential Election Explorer</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+      href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Newsreader:opsz,wght@6..72,500;6..72,650&display=swap"
+      rel="stylesheet"
+    >
+    <link rel="stylesheet" href="styles.css">
+    <script src="data/elections-data.js"></script>
+    <script src="app.js" defer></script>
+  </head>
+  <body>
+    <a class="skip-link" href="#main-content">Skip to visualizations</a>
+
+    <header class="site-header">
+      <a class="brand" href="#top" aria-label="American Choice home">
+        <span class="brand-mark" aria-hidden="true">
+          <i></i><i></i><i></i><i></i>
+        </span>
+        <span>
+          <strong>American Choice</strong>
+          <small>Presidential election explorer</small>
+        </span>
+      </a>
+      <nav aria-label="Page sections">
+        <a href="#map-section">Map</a>
+        <a href="#trends-section">Trends</a>
+        <a href="#demographics-section">Demographics</a>
+        <a href="#sources-section">Sources</a>
+      </nav>
+      <span class="source-pill">
+        <span aria-hidden="true"></span>
+        Real source data
+      </span>
+    </header>
+
+    <main id="main-content">
+      <section class="hero" id="top">
+        <div class="hero-copy">
+          <p class="eyebrow">13 elections · 51 jurisdictions · one evolving electorate</p>
+          <h1>How America<br><em>chooses.</em></h1>
+          <p class="hero-intro">
+            Follow presidential voting patterns across states, parties, and
+            demographic groups from 1976 through 2024.
+          </p>
+          <div class="hero-notice">
+            <span class="notice-icon" aria-hidden="true">i</span>
+            <p>
+              <strong>About the record</strong>
+              State and national returns come from MEDSL. Exit-poll crosstabs
+              are a separate, limited series and are unavailable before 2008 in
+              this bundled edition.
+            </p>
+          </div>
+        </div>
+        <div class="hero-year" aria-hidden="true">
+          <span id="hero-year-shadow">2024</span>
+          <strong id="hero-year">2024</strong>
+          <small>Selected election</small>
+        </div>
+      </section>
+
+      <section class="control-dock" aria-label="Election filters">
+        <div class="control-group year-control">
+          <div class="control-heading">
+            <label for="year-select">Election year</label>
+            <output id="year-output" for="year-slider">2024</output>
+          </div>
+          <input id="year-slider" type="range" min="0" max="12" value="12" step="1">
+          <div class="range-labels" aria-hidden="true">
+            <span>1976</span><span>2000</span><span>2024</span>
+          </div>
+          <select id="year-select" class="mobile-year" aria-label="Election year"></select>
+        </div>
+
+        <div class="control-group">
+          <label for="party-filter">Winning party</label>
+          <select id="party-filter">
+            <option value="all">All parties</option>
+            <option value="democrat">Democratic</option>
+            <option value="republican">Republican</option>
+            <option value="other">Other</option>
+          </select>
+        </div>
+
+        <div class="control-group states-control">
+          <div class="control-heading">
+            <label for="state-filter">State focus</label>
+            <button id="clear-states" class="text-button" type="button">Clear</button>
+          </div>
+          <select
+            id="state-filter"
+            multiple
+            size="4"
+            aria-describedby="state-help"
+          ></select>
+          <small id="state-help">Ctrl/Cmd + click to select up to five trend lines.</small>
+        </div>
+
+        <div class="control-group">
+          <label for="demographic-filter">Demographic group</label>
+          <select id="demographic-filter">
+            <option value="race">Race</option>
+            <option value="gender">Gender</option>
+            <option value="age">Age band</option>
+            <option value="education">Education</option>
+            <option value="income">Income</option>
+          </select>
+          <small id="demographic-help">Exit-poll availability varies by year.</small>
+        </div>
+      </section>
+
+      <div id="live-status" class="sr-only" aria-live="polite"></div>
+
+      <section class="summary-strip" aria-label="Election summary">
+        <article>
+          <span>Popular vote leader</span>
+          <strong id="summary-winner">—</strong>
+          <small id="summary-winner-share">—</small>
+        </article>
+        <article>
+          <span>Closest state</span>
+          <strong id="summary-closest">—</strong>
+          <small id="summary-closest-margin">—</small>
+        </article>
+        <article>
+          <span>Votes recorded</span>
+          <strong id="summary-turnout">—</strong>
+          <small>Votes for candidates in the record</small>
+        </article>
+        <article>
+          <span>States carried</span>
+          <strong id="summary-states">—</strong>
+          <small id="summary-state-split">—</small>
+        </article>
+      </section>
+
+      <section class="section map-section" id="map-section">
+        <div class="section-heading">
+          <div>
+            <p class="eyebrow">The electoral landscape</p>
+            <h2>State winners, at a glance.</h2>
+          </div>
+          <div class="legend" aria-label="Map legend">
+            <span><i class="legend-democrat"></i> Democratic</span>
+            <span><i class="legend-republican"></i> Republican</span>
+            <span><i class="legend-other"></i> Other</span>
+            <span class="legend-scale">Lighter <b></b> <b></b> <b></b> Stronger margin</span>
+          </div>
+        </div>
+
+        <div class="map-layout">
+          <div class="map-card">
+            <div
+              id="state-map"
+              class="state-map"
+              role="group"
+              aria-label="Interactive tile map of state presidential results"
+            ></div>
+            <p class="map-caption">
+              Tile positions are schematic. Color, pattern, party letter, and
+              text all encode the result so color is never the only signal.
+            </p>
+          </div>
+          <aside id="map-detail" class="map-detail" aria-live="polite">
+            <p class="eyebrow">Focus a state</p>
+            <h3>Hover, focus, or select a tile</h3>
+            <p>State-level winner, vote share, margin, and electoral-vote allocation appear here.</p>
+          </aside>
+        </div>
+      </section>
+
+      <section class="section trends-section" id="trends-section">
+        <div class="section-heading">
+          <div>
+            <p class="eyebrow">The long view</p>
+            <h2>Parties and places over time.</h2>
+          </div>
+          <p class="section-note">
+            National lines use all votes in the MEDSL record. State trend lines
+            show the Democratic minus Republican vote-share margin.
+          </p>
+        </div>
+
+        <div class="chart-grid">
+          <article class="chart-card chart-card-wide">
+            <div class="card-heading">
+              <div>
+                <span class="card-kicker">National popular vote</span>
+                <h3>Party vote share, 1976–2024</h3>
+              </div>
+              <div id="national-legend" class="chart-legend"></div>
+            </div>
+            <div id="national-chart" class="svg-chart"></div>
+          </article>
+
+          <article class="chart-card">
+            <div class="card-heading">
+              <div>
+                <span class="card-kicker">State trajectory</span>
+                <h3 id="state-chart-title">Pennsylvania margin</h3>
+              </div>
+              <span class="chart-note">D + / R −</span>
+            </div>
+            <div id="state-chart" class="svg-chart"></div>
+            <div id="state-trend-legend" class="state-trend-legend"></div>
+          </article>
+        </div>
+      </section>
+
+      <section class="section demographics-section" id="demographics-section">
+        <div class="section-heading">
+          <div>
+            <p class="eyebrow">Who voted which way</p>
+            <h2>Exit polls, with the gaps visible.</h2>
+          </div>
+          <p class="section-note">
+            These are national exit-poll estimates, not state returns. “Other /
+            no response” includes rounding and candidates outside the two shown.
+          </p>
+        </div>
+
+        <article class="demographic-card">
+          <div class="demographic-meta">
+            <div>
+              <span class="card-kicker" id="demographic-year-label">2024 exit poll</span>
+              <h3 id="demographic-title">Vote by race</h3>
+            </div>
+            <div id="demographic-legend" class="chart-legend"></div>
+          </div>
+          <div id="demographic-chart" class="demographic-chart"></div>
+          <div id="demographic-empty" class="empty-state" hidden>
+            <span aria-hidden="true">∅</span>
+            <h3>No crosstab for this selection</h3>
+            <p id="demographic-empty-copy"></p>
+          </div>
+          <p id="demographic-source" class="source-line"></p>
+        </article>
+      </section>
+
+      <section class="section results-section" id="results-section">
+        <div class="section-heading">
+          <div>
+            <p class="eyebrow">State by state</p>
+            <h2>Results table.</h2>
+          </div>
+          <p id="table-count" class="section-note">51 jurisdictions</p>
+        </div>
+
+        <div class="table-shell">
+          <table>
+            <caption class="sr-only">
+              State presidential election results for the selected year
+            </caption>
+            <thead>
+              <tr>
+                <th scope="col"><button data-sort="name">State <span>↕</span></button></th>
+                <th scope="col"><button data-sort="winner">Winner <span>↕</span></button></th>
+                <th scope="col"><button data-sort="electoralVotes">EV <span>↕</span></button></th>
+                <th scope="col"><button data-sort="share">Popular vote <span>↕</span></button></th>
+                <th scope="col"><button data-sort="marginShare">Margin <span>↕</span></button></th>
+              </tr>
+            </thead>
+            <tbody id="results-body"></tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="section sources-section" id="sources-section">
+        <div class="section-heading">
+          <div>
+            <p class="eyebrow">Read the fine print</p>
+            <h2>Sources, coverage, and limits.</h2>
+          </div>
+        </div>
+
+        <div class="source-grid">
+          <article>
+            <span class="source-number">01</span>
+            <h3>Election returns</h3>
+            <p>
+              State-level candidate votes and national totals are derived from
+              MEDSL’s current presidential constituency-return file.
+            </p>
+            <a href="https://doi.org/10.7910/DVN/42MVDX" target="_blank" rel="noreferrer">
+              MEDSL: U.S. President 1976–2024
+            </a>
+          </article>
+          <article>
+            <span class="source-number">02</span>
+            <h3>Demographic crosstabs</h3>
+            <p>
+              National Election Pool exit-poll summaries are transcribed from
+              Roper Center tables for 2008, 2012, 2016, 2020, and 2024.
+            </p>
+            <a href="https://ropercenter.cornell.edu/elections-and-presidents/exit-polls" target="_blank" rel="noreferrer">
+              Roper Center exit polls
+            </a>
+          </article>
+          <article>
+            <span class="source-number">03</span>
+            <h3>What is not filled in</h3>
+            <p>
+              No synthetic historical results are shown. Earlier demographic
+              years, unpublished categories, and county returns before 1976
+              remain unavailable instead of being estimated.
+            </p>
+            <span class="gap-badge">Explicit gaps</span>
+          </article>
+        </div>
+
+        <div class="method-note">
+          <strong>Method note</strong>
+          <p>
+            Candidate lines are aggregated within each state, including fusion
+            party lines. “Other” includes candidate lines outside the Democratic
+            and Republican nominees; administrative blank, void, overvote, and
+            undervote rows are excluded from popular-vote shares. Electoral-vote
+            values show each jurisdiction’s allocation for that election, not
+            district-level awards in Maine or Nebraska.
+          </p>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      <span>American Choice</span>
+      <p>Built as a static, source-transparent election explorer.</p>
+      <a href="#top">Back to top ↑</a>
+    </footer>
+  </body>
+</html>
