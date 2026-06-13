@@ -20,7 +20,7 @@ const PARTY = {
 };
 
 const STATE_LINE_COLORS = [
-  "#173d2b",
+  "#3f9b70",
   "#277da1",
   "#d97706",
   "#7b61a8",
@@ -49,6 +49,7 @@ document.addEventListener("DOMContentLoaded", init);
 
 async function init() {
   cacheDom();
+  syncThemeControl();
 
   try {
     if (window.ELECTION_DATA) {
@@ -86,6 +87,7 @@ function cacheDom() {
     "demographic-year-label", "demographic-title", "demographic-legend",
     "demographic-chart", "demographic-empty", "demographic-empty-copy",
     "demographic-source", "results-body", "table-count",
+    "theme-toggle", "theme-label",
   ];
 
   for (const id of ids) dom[toCamel(id)] = document.getElementById(id);
@@ -109,6 +111,13 @@ function populateControls() {
 }
 
 function bindEvents() {
+  dom.themeToggle.addEventListener("click", () => {
+    const currentTheme = document.documentElement.dataset.theme === "dark"
+      ? "dark"
+      : "light";
+    applyTheme(currentTheme === "dark" ? "light" : "dark", true);
+  });
+
   dom.yearSlider.addEventListener("input", (event) => {
     selectYear(state.years[Number(event.target.value)]);
   });
@@ -157,6 +166,32 @@ function bindEvents() {
       renderTable();
     });
   });
+}
+
+function syncThemeControl() {
+  const theme = document.documentElement.dataset.theme === "dark" ? "dark" : "light";
+  applyTheme(theme, false);
+}
+
+function applyTheme(theme, persist) {
+  const isDark = theme === "dark";
+  document.documentElement.dataset.theme = isDark ? "dark" : "light";
+  dom.themeToggle.setAttribute("aria-pressed", String(isDark));
+  dom.themeToggle.setAttribute(
+    "aria-label",
+    isDark ? "Switch to light theme" : "Switch to dark theme",
+  );
+  dom.themeLabel.textContent = isDark ? "Light" : "Dark";
+  document.querySelector('meta[name="theme-color"]').content =
+    isDark ? "#0e1410" : "#f5f1e8";
+
+  if (persist) {
+    try {
+      localStorage.setItem("election-theme", isDark ? "dark" : "light");
+    } catch {
+      // Theme still applies when storage is unavailable.
+    }
+  }
 }
 
 function selectYear(year) {
