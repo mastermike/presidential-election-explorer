@@ -187,7 +187,7 @@ main {
 .hero,
 .section,
 .summary-strip,
-.control-dock {
+.explorer-layout {
   width: min(1280px, 92vw);
   margin-inline: auto;
 }
@@ -338,15 +338,65 @@ main {
   text-transform: uppercase;
 }
 
-.control-dock {
+.explorer-layout {
   display: grid;
-  grid-template-columns: 1.55fr 0.85fr 1.2fr 1fr;
+  grid-template-columns: minmax(238px, 278px) minmax(0, 1fr);
+  gap: clamp(1.25rem, 2.4vw, 2.4rem);
+  align-items: start;
+}
+
+.explorer-content {
+  min-width: 0;
+}
+
+.explorer-content > .section,
+.explorer-content > .summary-strip {
+  width: 100%;
+  margin-inline: 0;
+}
+
+.control-dock {
+  position: sticky;
+  top: 102px;
+  z-index: 20;
+  max-height: calc(100vh - 122px);
+  display: flex;
+  flex-direction: column;
   gap: 1px;
   border: 1px solid var(--line);
   border-radius: var(--radius);
   background: var(--line);
   box-shadow: var(--shadow);
-  overflow: hidden;
+  overflow-x: hidden;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: #a9b0aa transparent;
+}
+
+.filter-rail-heading {
+  padding: 1.25rem 1.35rem 1.1rem;
+  background: var(--green);
+  color: white;
+}
+
+.filter-rail-heading span,
+.filter-rail-heading strong {
+  display: block;
+}
+
+.filter-rail-heading span {
+  margin-bottom: 0.15rem;
+  color: #bfcfc4;
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.filter-rail-heading strong {
+  font-family: "Newsreader", Georgia, serif;
+  font-size: 1.42rem;
+  font-weight: 500;
 }
 
 .control-group {
@@ -444,7 +494,7 @@ input[type="range"] {
 }
 
 .summary-strip {
-  margin-top: 2.5rem;
+  margin-top: 0;
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   border-top: 1px solid var(--line);
@@ -1123,8 +1173,18 @@ footer a {
     grid-template-columns: 1fr 0.65fr;
   }
 
-  .control-dock {
-    grid-template-columns: 1fr 1fr;
+  .explorer-layout {
+    width: min(1320px, 96vw);
+    grid-template-columns: 225px minmax(0, 1fr);
+    gap: 1rem;
+  }
+
+  .control-group {
+    padding: 1rem;
+  }
+
+  .filter-rail-heading {
+    padding-inline: 1rem;
   }
 
   .summary-strip {
@@ -1146,6 +1206,25 @@ footer a {
 
   .map-detail {
     min-height: 0;
+  }
+}
+
+@media (max-width: 880px) {
+  .explorer-layout {
+    width: min(1280px, 92vw);
+    grid-template-columns: 1fr;
+  }
+
+  .control-dock {
+    position: static;
+    max-height: none;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    overflow: hidden;
+  }
+
+  .filter-rail-heading {
+    grid-column: 1 / -1;
   }
 }
 
@@ -1176,6 +1255,10 @@ footer a {
 
   .control-dock {
     grid-template-columns: 1fr;
+  }
+
+  .filter-rail-heading {
+    grid-column: auto;
   }
 
   .year-control input,
