@@ -69,59 +69,66 @@
         </div>
       </section>
 
-      <section class="control-dock" aria-label="Election filters">
-        <div class="control-group year-control">
-          <div class="control-heading">
-            <label for="year-select">Election year</label>
-            <output id="year-output" for="year-slider">2024</output>
+      <div class="explorer-layout">
+        <aside class="control-dock" aria-label="Election filters">
+          <div class="filter-rail-heading">
+            <span>Explorer controls</span>
+            <strong>Adjust the view</strong>
           </div>
-          <input id="year-slider" type="range" min="0" max="12" value="12" step="1">
-          <div class="range-labels" aria-hidden="true">
-            <span>1976</span><span>2000</span><span>2024</span>
+
+          <div class="control-group year-control">
+            <div class="control-heading">
+              <label for="year-select">Election year</label>
+              <output id="year-output" for="year-slider">2024</output>
+            </div>
+            <input id="year-slider" type="range" min="0" max="12" value="12" step="1">
+            <div class="range-labels" aria-hidden="true">
+              <span>1976</span><span>2000</span><span>2024</span>
+            </div>
+            <select id="year-select" class="mobile-year" aria-label="Election year"></select>
           </div>
-          <select id="year-select" class="mobile-year" aria-label="Election year"></select>
-        </div>
 
-        <div class="control-group">
-          <label for="party-filter">Winning party</label>
-          <select id="party-filter">
-            <option value="all">All parties</option>
-            <option value="democrat">Democratic</option>
-            <option value="republican">Republican</option>
-            <option value="other">Other</option>
-          </select>
-        </div>
-
-        <div class="control-group states-control">
-          <div class="control-heading">
-            <label for="state-filter">State focus</label>
-            <button id="clear-states" class="text-button" type="button">Clear</button>
+          <div class="control-group">
+            <label for="party-filter">Winning party</label>
+            <select id="party-filter">
+              <option value="all">All parties</option>
+              <option value="democrat">Democratic</option>
+              <option value="republican">Republican</option>
+              <option value="other">Other</option>
+            </select>
           </div>
-          <select
-            id="state-filter"
-            multiple
-            size="4"
-            aria-describedby="state-help"
-          ></select>
-          <small id="state-help">Ctrl/Cmd + click to select up to five trend lines.</small>
-        </div>
 
-        <div class="control-group">
-          <label for="demographic-filter">Demographic group</label>
-          <select id="demographic-filter">
-            <option value="race">Race</option>
-            <option value="gender">Gender</option>
-            <option value="age">Age band</option>
-            <option value="education">Education</option>
-            <option value="income">Income</option>
-          </select>
-          <small id="demographic-help">Exit-poll availability varies by year.</small>
-        </div>
-      </section>
+          <div class="control-group states-control">
+            <div class="control-heading">
+              <label for="state-filter">State focus</label>
+              <button id="clear-states" class="text-button" type="button">Clear</button>
+            </div>
+            <select
+              id="state-filter"
+              multiple
+              size="4"
+              aria-describedby="state-help"
+            ></select>
+            <small id="state-help">Ctrl/Cmd + click to select up to five trend lines.</small>
+          </div>
 
-      <div id="live-status" class="sr-only" aria-live="polite"></div>
+          <div class="control-group">
+            <label for="demographic-filter">Demographic group</label>
+            <select id="demographic-filter">
+              <option value="race">Race</option>
+              <option value="gender">Gender</option>
+              <option value="age">Age band</option>
+              <option value="education">Education</option>
+              <option value="income">Income</option>
+            </select>
+            <small id="demographic-help">Exit-poll availability varies by year.</small>
+          </div>
+        </aside>
 
-      <section class="summary-strip" aria-label="Election summary">
+        <div class="explorer-content">
+          <div id="live-status" class="sr-only" aria-live="polite"></div>
+
+          <section class="summary-strip" aria-label="Election summary">
         <article>
           <span>Popular vote leader</span>
           <strong id="summary-winner">—</strong>
@@ -142,9 +149,9 @@
           <strong id="summary-states">—</strong>
           <small id="summary-state-split">—</small>
         </article>
-      </section>
+          </section>
 
-      <section class="section map-section" id="map-section">
+          <section class="section map-section" id="map-section">
         <div class="section-heading">
           <div>
             <p class="eyebrow">The electoral landscape</p>
@@ -177,9 +184,9 @@
             <p>State-level winner, vote share, margin, and electoral-vote allocation appear here.</p>
           </aside>
         </div>
-      </section>
+          </section>
 
-      <section class="section trends-section" id="trends-section">
+          <section class="section trends-section" id="trends-section">
         <div class="section-heading">
           <div>
             <p class="eyebrow">The long view</p>
@@ -215,9 +222,9 @@
             <div id="state-trend-legend" class="state-trend-legend"></div>
           </article>
         </div>
-      </section>
+          </section>
 
-      <section class="section demographics-section" id="demographics-section">
+          <section class="section demographics-section" id="demographics-section">
         <div class="section-heading">
           <div>
             <p class="eyebrow">Who voted which way</p>
@@ -245,9 +252,9 @@
           </div>
           <p id="demographic-source" class="source-line"></p>
         </article>
-      </section>
+          </section>
 
-      <section class="section results-section" id="results-section">
+          <section class="section results-section" id="results-section">
         <div class="section-heading">
           <div>
             <p class="eyebrow">State by state</p>
@@ -273,9 +280,9 @@
             <tbody id="results-body"></tbody>
           </table>
         </div>
-      </section>
+          </section>
 
-      <section class="section sources-section" id="sources-section">
+          <section class="section sources-section" id="sources-section">
         <div class="section-heading">
           <div>
             <p class="eyebrow">Read the fine print</p>
@@ -329,7 +336,9 @@
             district-level awards in Maine or Nebraska.
           </p>
         </div>
-      </section>
+          </section>
+        </div>
+      </div>
     </main>
 
     <footer>
