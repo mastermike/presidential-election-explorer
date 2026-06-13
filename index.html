@@ -7,7 +7,21 @@
       name="description"
       content="Interactive exploration of U.S. presidential election results from 1976 through 2024."
     >
+    <meta name="theme-color" content="#f5f1e8">
     <title>American Choice | Presidential Election Explorer</title>
+    <script>
+      (() => {
+        try {
+          const savedTheme = localStorage.getItem("election-theme");
+          const systemTheme = matchMedia("(prefers-color-scheme: dark)").matches
+            ? "dark"
+            : "light";
+          document.documentElement.dataset.theme = savedTheme || systemTheme;
+        } catch {
+          document.documentElement.dataset.theme = "light";
+        }
+      })();
+    </script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link
@@ -37,10 +51,22 @@
         <a href="#demographics-section">Demographics</a>
         <a href="#sources-section">Sources</a>
       </nav>
-      <span class="source-pill">
-        <span aria-hidden="true"></span>
-        Real source data
-      </span>
+      <div class="header-actions">
+        <span class="source-pill">
+          <span aria-hidden="true"></span>
+          Real source data
+        </span>
+        <button
+          id="theme-toggle"
+          class="theme-toggle"
+          type="button"
+          aria-pressed="false"
+          aria-label="Switch to dark theme"
+        >
+          <span class="theme-icon" aria-hidden="true"></span>
+          <span id="theme-label">Dark</span>
+        </button>
+      </div>
     </header>
 
     <main id="main-content">
