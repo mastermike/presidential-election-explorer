@@ -6,12 +6,50 @@
   --white: #fffdf8;
   --line: #d8d1c3;
   --green: #173d2b;
+  --panel-green: #173d2b;
   --green-soft: #dce8de;
+  --header-bg: rgba(245, 241, 232, 0.88);
+  --notice-bg: rgba(255, 253, 248, 0.62);
+  --input-bg: #ffffff;
+  --disabled-bg: #efede6;
+  --row-line: #e8e2d7;
+  --row-hover: rgba(39, 125, 161, 0.055);
+  --grid-line: #ded8cc;
+  --other-bar: #a9a79f;
+  --footer-bg: #18211b;
+  --footer-ink: #ffffff;
+  --footer-muted: #bcc5be;
   --democrat: #277da1;
   --republican: #d97706;
   --other: #7b61a8;
   --shadow: 0 20px 55px rgba(32, 42, 34, 0.09);
   --radius: 22px;
+  color-scheme: light;
+}
+
+:root[data-theme="dark"] {
+  --ink: #f0eee7;
+  --muted: #a8b1aa;
+  --paper: #0e1410;
+  --paper-deep: #202922;
+  --white: #171f19;
+  --line: #354039;
+  --green: #83d3a5;
+  --panel-green: #173d2b;
+  --green-soft: #20382b;
+  --header-bg: rgba(14, 20, 16, 0.9);
+  --notice-bg: rgba(23, 31, 25, 0.78);
+  --input-bg: #111813;
+  --disabled-bg: #252d27;
+  --row-line: #303a33;
+  --row-hover: rgba(73, 156, 191, 0.1);
+  --grid-line: #3b463f;
+  --other-bar: #777f79;
+  --footer-bg: #080d0a;
+  --footer-ink: #f0eee7;
+  --footer-muted: #a8b1aa;
+  --shadow: 0 20px 55px rgba(0, 0, 0, 0.3);
+  color-scheme: dark;
 }
 
 * {
@@ -88,8 +126,8 @@ a {
   align-items: center;
   justify-content: space-between;
   gap: 2rem;
-  border-bottom: 1px solid rgba(24, 33, 27, 0.14);
-  background: rgba(245, 241, 232, 0.88);
+  border-bottom: 1px solid var(--line);
+  background: var(--header-bg);
   backdrop-filter: blur(18px);
   position: sticky;
   top: 0;
@@ -156,12 +194,18 @@ a {
   color: var(--ink);
 }
 
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+}
+
 .source-pill,
 .gap-badge {
   display: inline-flex;
   align-items: center;
   gap: 0.55rem;
-  border: 1px solid rgba(23, 61, 43, 0.22);
+  border: 1px solid var(--line);
   border-radius: 999px;
   background: var(--green-soft);
   color: var(--green);
@@ -170,6 +214,55 @@ a {
   letter-spacing: 0.04em;
   padding: 0.5rem 0.8rem;
   text-transform: uppercase;
+}
+
+.theme-toggle {
+  min-height: 36px;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.48rem;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: var(--white);
+  color: var(--ink);
+  cursor: pointer;
+  padding: 0.45rem 0.72rem;
+  font-size: 0.72rem;
+  font-weight: 700;
+  transition: background-color 150ms ease, border-color 150ms ease, color 150ms ease;
+}
+
+.theme-toggle:hover {
+  border-color: var(--muted);
+}
+
+.theme-icon {
+  width: 15px;
+  height: 15px;
+  display: block;
+  position: relative;
+  border-radius: 50%;
+  background: var(--ink);
+  box-shadow: inset -5px -3px 0 var(--white);
+}
+
+:root[data-theme="dark"] .theme-icon {
+  background: var(--republican);
+  box-shadow: 0 0 0 3px rgba(217, 119, 6, 0.14);
+}
+
+:root[data-theme="dark"] .theme-icon::before,
+:root[data-theme="dark"] .theme-icon::after {
+  content: "";
+  position: absolute;
+  inset: -4px;
+  border-top: 1px solid var(--republican);
+  border-bottom: 1px solid var(--republican);
+  border-radius: 50%;
+}
+
+:root[data-theme="dark"] .theme-icon::after {
+  transform: rotate(90deg);
 }
 
 .source-pill span {
@@ -243,7 +336,7 @@ main {
 .hero-intro {
   max-width: 610px;
   margin: 2rem 0;
-  color: #4f5a53;
+  color: var(--muted);
   font-family: "Newsreader", Georgia, serif;
   font-size: clamp(1.2rem, 2vw, 1.55rem);
 }
@@ -255,7 +348,7 @@ main {
   gap: 0.9rem;
   padding: 1rem 1.1rem;
   border-left: 3px solid var(--democrat);
-  background: rgba(255, 253, 248, 0.62);
+  background: var(--notice-bg);
   color: var(--muted);
   font-size: 0.84rem;
 }
@@ -294,7 +387,7 @@ main {
 .hero-year::after {
   content: "";
   position: absolute;
-  border: 1px solid rgba(23, 61, 43, 0.18);
+  border: 1px solid var(--line);
   border-radius: 50%;
 }
 
@@ -375,7 +468,7 @@ main {
 
 .filter-rail-heading {
   padding: 1.25rem 1.35rem 1.1rem;
-  background: var(--green);
+  background: var(--panel-green);
   color: white;
 }
 
@@ -437,15 +530,15 @@ select {
   width: 100%;
   border: 1px solid var(--line);
   border-radius: 9px;
-  background: #fff;
+  background: var(--input-bg);
   color: var(--ink);
   padding: 0.68rem 0.75rem;
 }
 
 select:disabled {
   cursor: not-allowed;
-  color: #9da49f;
-  background: #efede6;
+  color: var(--muted);
+  background: var(--disabled-bg);
 }
 
 select[multiple] {
@@ -485,7 +578,7 @@ input[type="range"] {
 .range-labels {
   display: flex;
   justify-content: space-between;
-  color: #929a95;
+  color: var(--muted);
   font-size: 0.64rem;
 }
 
@@ -635,7 +728,7 @@ input[type="range"] {
   border: 1px solid var(--line);
   border-radius: var(--radius);
   background: var(--white);
-  box-shadow: 0 10px 40px rgba(31, 39, 32, 0.045);
+  box-shadow: var(--shadow);
 }
 
 .map-card {
@@ -833,13 +926,13 @@ input[type="range"] {
 }
 
 .grid-line {
-  stroke: #ded8cc;
+  stroke: var(--grid-line);
   stroke-width: 1;
   stroke-dasharray: 3 5;
 }
 
 .axis-label {
-  fill: #7b847e;
+  fill: var(--muted);
   font-family: "DM Sans", sans-serif;
   font-size: 10px;
 }
@@ -945,7 +1038,7 @@ input[type="range"] {
 }
 
 .bar-segment.other {
-  background: #a9a79f;
+  background: var(--other-bar);
   color: var(--ink);
 }
 
@@ -1010,7 +1103,7 @@ table {
 }
 
 th {
-  background: var(--green);
+  background: var(--panel-green);
   color: white;
   text-align: left;
 }
@@ -1032,7 +1125,7 @@ th button {
 
 td {
   padding: 0.95rem 1.1rem;
-  border-bottom: 1px solid #e8e2d7;
+  border-bottom: 1px solid var(--row-line);
   font-size: 0.83rem;
 }
 
@@ -1041,7 +1134,7 @@ tbody tr:last-child td {
 }
 
 tbody tr:hover {
-  background: rgba(39, 125, 161, 0.055);
+  background: var(--row-hover);
 }
 
 .winner-cell {
@@ -1126,7 +1219,7 @@ tbody tr:hover {
   display: grid;
   grid-template-columns: 170px 1fr;
   gap: 1.5rem;
-  border: 1px solid rgba(23, 61, 43, 0.24);
+  border: 1px solid var(--line);
   border-radius: 16px;
   background: var(--green-soft);
 }
@@ -1138,7 +1231,7 @@ tbody tr:hover {
 
 .method-note p {
   margin: 0;
-  color: #4f6256;
+  color: var(--muted);
   font-size: 0.8rem;
 }
 
@@ -1149,8 +1242,8 @@ footer {
   align-items: center;
   justify-content: space-between;
   gap: 1rem;
-  background: var(--ink);
-  color: white;
+  background: var(--footer-bg);
+  color: var(--footer-ink);
 }
 
 footer span {
@@ -1160,7 +1253,7 @@ footer span {
 
 footer p,
 footer a {
-  color: #bcc5be;
+  color: var(--footer-muted);
   font-size: 0.76rem;
 }
 
