@@ -1,8 +1,9 @@
 # American Choice
 
 A static, responsive explorer for U.S. presidential election results from 1976
-through 2024. Open `index.html` directly or serve the folder with any static
-server.
+through 2024. It includes a persistent light/dark theme that defaults to the
+visitor's system preference. Open `index.html` directly or serve the folder
+with any static server.
 
 ## Run locally
 
