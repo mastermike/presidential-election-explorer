@@ -274,7 +274,11 @@ a {
 }
 
 main {
-  overflow: hidden;
+  overflow: visible;
+}
+
+body {
+  overflow-x: clip;
 }
 
 .hero,
@@ -451,6 +455,8 @@ main {
 .control-dock {
   position: sticky;
   top: 102px;
+  align-self: start;
+  height: max-content;
   z-index: 20;
   max-height: calc(100vh - 122px);
   display: flex;
@@ -1302,7 +1308,7 @@ footer a {
   }
 }
 
-@media (max-width: 880px) {
+@media (max-width: 760px) {
   .explorer-layout {
     width: min(1280px, 92vw);
     grid-template-columns: 1fr;
